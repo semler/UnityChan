@@ -31,7 +31,7 @@ namespace UnityChan
 		// 旋回速度
 		public float rotateSpeed = 2.0f;
 		// ジャンプ威力
-		public float jumpPower = 3.0f; 
+		public float jumpPower = 2.0f; 
 		// キャラクターコントローラ（カプセルコライダ）の参照
 		private CapsuleCollider col;
 		private Rigidbody rb;
@@ -77,9 +77,7 @@ namespace UnityChan
 			anim.speed = animSpeed;								// Animatorのモーション再生速度に animSpeedを設定する
 			currentBaseState = anim.GetCurrentAnimatorStateInfo (0);	// 参照用のステート変数にBase Layer (0)の現在のステートを設定する
 			rb.useGravity = true;//ジャンプ中に重力を切るので、それ以外は重力の影響を受けるようにする
-		
-		
-		
+
 			// 以下、キャラクターの移動処理
 			velocity = new Vector3 (0, 0, v);		// 上下のキー入力からZ軸方向の移動量を取得
 			// キャラクターのローカル空間での方向に変換
@@ -90,7 +88,7 @@ namespace UnityChan
 			} else if (v < -0.1) {
 				velocity *= backwardSpeed;	// 移動速度を掛ける
 			}
-		
+
 			if (Input.GetButtonDown ("Jump")) {	// スペースキーを入力したら
 
 				//アニメーションのステートがLocomotionの最中のみジャンプできる
@@ -102,14 +100,14 @@ namespace UnityChan
 					}
 				}
 			}
-		
+
 
 			// 上下のキー入力でキャラクターを移動させる
 			transform.localPosition += velocity * Time.fixedDeltaTime;
 
 			// 左右のキー入力でキャラクタをY軸で旋回させる
 			transform.Rotate (0, h * rotateSpeed, 0);	
-	
+
 
 			// 以下、Animatorの各ステート中での処理
 			// Locomotion中
@@ -120,13 +118,13 @@ namespace UnityChan
 					resetCollider ();
 				}
 			}
-		// JUMP中の処理
-		// 現在のベースレイヤーがjumpStateの時
-		else if (currentBaseState.fullPathHash == jumpState) {
+			// JUMP中の処理
+			// 現在のベースレイヤーがjumpStateの時
+			else if (currentBaseState.fullPathHash == jumpState) {
 				cameraObject.SendMessage ("setCameraPositionJumpView");	// ジャンプ中のカメラに変更
 				// ステートがトランジション中でない場合
 				if (!anim.IsInTransition (0)) {
-				
+
 					// 以下、カーブ調整をする場合の処理
 					if (useCurves) {
 						// 以下JUMP00アニメーションについているカーブJumpHeightとGravityControl
@@ -136,7 +134,7 @@ namespace UnityChan
 						float gravityControl = anim.GetFloat ("GravityControl"); 
 						if (gravityControl > 0)
 							rb.useGravity = false;	//ジャンプ中の重力の影響を切る
-										
+
 						// レイキャストをキャラクターのセンターから落とす
 						Ray ray = new Ray (transform.position + Vector3.up, -Vector3.up);
 						RaycastHit hitInfo = new RaycastHit ();
@@ -156,9 +154,9 @@ namespace UnityChan
 					anim.SetBool ("Jump", false);
 				}
 			}
-		// IDLE中の処理
-		// 現在のベースレイヤーがidleStateの時
-		else if (currentBaseState.fullPathHash == idleState) {
+			// IDLE中の処理
+			// 現在のベースレイヤーがidleStateの時
+			else if (currentBaseState.fullPathHash == idleState) {
 				//カーブでコライダ調整をしている時は、念のためにリセットする
 				if (useCurves) {
 					resetCollider ();
@@ -168,9 +166,9 @@ namespace UnityChan
 					anim.SetBool ("Rest", true);
 				}
 			}
-		// REST中の処理
-		// 現在のベースレイヤーがrestStateの時
-		else if (currentBaseState.fullPathHash == restState) {
+			// REST中の処理
+			// 現在のベースレイヤーがrestStateの時
+			else if (currentBaseState.fullPathHash == restState) {
 				//cameraObject.SendMessage("setCameraPositionFrontView");		// カメラを正面に切り替える
 				// ステートが遷移中でない場合、Rest bool値をリセットする（ループしないようにする）
 				if (!anim.IsInTransition (0)) {
