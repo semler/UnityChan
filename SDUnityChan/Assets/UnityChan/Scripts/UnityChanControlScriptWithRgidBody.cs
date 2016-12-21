@@ -16,7 +16,6 @@ namespace UnityChan
 
 	public class UnityChanControlScriptWithRgidBody : MonoBehaviour
 	{
-
 		public float animSpeed = 1.5f;				// アニメーション再生速度設定
 		public float lookSmoother = 3.0f;			// a smoothing setting for camera motion
 		public bool useCurves = true;				// Mecanimでカーブ調整を使うか設定する
@@ -50,6 +49,10 @@ namespace UnityChan
 		static int locoState = Animator.StringToHash ("Base Layer.Locomotion");
 		static int jumpState = Animator.StringToHash ("Base Layer.Jump");
 		static int restState = Animator.StringToHash ("Base Layer.Rest");
+		static int attackedState = Animator.StringToHash ("Base Layer.Attacked");
+
+		private float safeTime = 3.0f;       
+		private float currentTime = 0.0f;
 
 		// 初期化
 		void Start ()
@@ -78,6 +81,12 @@ namespace UnityChan
 			currentBaseState = anim.GetCurrentAnimatorStateInfo (0);	// 参照用のステート変数にBase Layer (0)の現在のステートを設定する
 			rb.useGravity = true;//ジャンプ中に重力を切るので、それ以外は重力の影響を受けるようにする
 
+			currentTime += Time.deltaTime;
+			if (currentBaseState.fullPathHash == attackedState) {
+				anim.SetBool ("Attacked", false);
+				return;
+			}
+
 			// 以下、キャラクターの移動処理
 			velocity = new Vector3 (0, 0, v);		// 上下のキー入力からZ軸方向の移動量を取得
 			// キャラクターのローカル空間での方向に変換
@@ -100,7 +109,6 @@ namespace UnityChan
 					}
 				}
 			}
-
 
 			// 上下のキー入力でキャラクターを移動させる
 			transform.localPosition += velocity * Time.fixedDeltaTime;
@@ -195,6 +203,14 @@ namespace UnityChan
 			// コンポーネントのHeight、Centerの初期値を戻す
 			col.height = orgColHight;
 			col.center = orgVectColCenter;
+		}
+
+		void StartAttacked ()
+		{
+			if (currentBaseState.fullPathHash != attackedState && currentTime > safeTime) {
+				currentTime = 0.0f;
+				anim.SetBool ("Attacked", true);
+			}
 		}
 	}
 }
