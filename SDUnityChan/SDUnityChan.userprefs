@@ -1,0 +1,15 @@
+﻿<Properties StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.AttachToProcess" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/UnityChan/Scripts/UnityChanControlScriptWithRgidBody.cs">
+    <Files>
+      <File FileName="Assets/Scripts/MoveEnemy.cs" Line="60" Column="42" />
+      <File FileName="Assets/UnityChan/Scripts/UnityChanControlScriptWithRgidBody.cs" Line="190" Column="68" />
+      <File FileName="Assets/Yurowm/Demo/Scripts/Actions.cs" Line="46" Column="15" />
+      <File FileName="Assets/Yurowm/Demo/Scripts/PlayerController.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
